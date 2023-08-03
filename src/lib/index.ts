@@ -5,7 +5,7 @@ import {
 } from './utils';
 
 // ordered map of integer values to roman symbols
-export const INT_TO_ROMAN_MAP: Map<number, string> = new Map([
+export const INT_TO_ROMAN_BASE_MAP: Map<number, string> = new Map([
 	[1000, 'M'],
 	[900, 'CM'],
 	[500, 'D'],
@@ -39,7 +39,7 @@ export function intToRomanNumeral(intInput: number, intToRomanMap: Map<number, s
 	}
 
 	// validate map
-	if (!intToRomanMap || intToRomanMap.size === 0) {
+	if (!(intToRomanMap instanceof Map) || intToRomanMap.size === 0) {
 		throw new Error(intToRomanInvalidMapErrorMessage(intToRomanMap));
 	}
 
