@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '../constants';
 import { intToRoman } from '../lib';
 import { RomanNumeralIntInputConstraints } from './constants';
 import {
@@ -18,23 +19,37 @@ export function convertIntToRomanNumeral(
 	// convert query param to integer for validation and further processing
 	const inputInt: number = parseInt(inputIntAsString, 10);
 	// validate input
-	if (
-		isNaN(inputInt) ||
-		inputInt < RomanNumeralIntInputConstraints.MIN ||
-		inputInt > RomanNumeralIntInputConstraints.MAX
-	) {
-		const errorResponse: RomanNumeralErrorResponseBody = {
-			error: 'Invalid input. Input must be an integer between 1 and 255.',
+	const isInputValid: boolean =
+		Number.isInteger(inputInt) &&
+		inputInt >= RomanNumeralIntInputConstraints.MIN &&
+		inputInt <= RomanNumeralIntInputConstraints.MAX;
+
+	if (!isInputValid) {
+		const badRequestResponseBody: RomanNumeralErrorResponseBody = {
+			error: `Invalid param [query=${inputIntAsString}] - must be an integer between ${RomanNumeralIntInputConstraints.MIN} and ${RomanNumeralIntInputConstraints.MAX} (inclusive).`,
 		};
-		// bad request
-		res.status(400).json(errorResponse);
+		// bad request, exit early
+		res.status(HttpStatusCode.BAD_REQUEST).json(badRequestResponseBody);
+		return;
+	}
+
+	let romanNumeralOutput: string;
+	try {
+		// attempt int to roman conversion
+		romanNumeralOutput = intToRoman(inputInt);
+	} catch (err) {
+		// internal server error, exit early
+		const serverErrorResponseBody: RomanNumeralErrorResponseBody = {
+			error: 'Internal server error.',
+		};
+		res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(serverErrorResponseBody);
 		return;
 	}
 	// create response object
 	const response: RomanNumeralSuccessResponseBody = {
 		input: inputIntAsString,
-		output: intToRoman(inputInt),
+		output: romanNumeralOutput,
 	};
 	// send json response
-	res.json(response);
+	res.status(HttpStatusCode.OK).json(response);
 }
