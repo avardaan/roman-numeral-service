@@ -1,8 +1,11 @@
 import { IntToRomanInputConstraints } from './constants';
-import { IntToRomanMap } from './types';
 
 // ordered
 const INT_TO_ROMAN_MAP: Map<number, string> = new Map([
+	[1000, 'M'],
+	[900, 'CM'],
+	[500, 'D'],
+	[400, 'CD'],
 	[100, 'C'],
 	[90, 'XC'],
 	[50, 'L'],
