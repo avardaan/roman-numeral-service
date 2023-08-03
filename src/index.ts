@@ -1,5 +1,4 @@
 // Roman Numeral Converter API
-
 import express, { Express } from 'express';
 import { apiRouter } from './api';
 
@@ -12,10 +11,9 @@ const app: Express = express();
 // attach router with handlers
 app.use('/', apiRouter);
 
-app.all('*', (req, res) => {
-	res.status(404).json({
-		error: 'Not Found',
-	});
+// catch all other routes, respond with 404
+app.all('*', (_, res) => {
+	res.status(404).send('404 Not Found');
 });
 
 // start server and listen for requests
