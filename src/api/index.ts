@@ -1,6 +1,6 @@
 import express, { Express } from 'express';
 import { apiRouter } from './router';
-import { HttpStatusCode } from '../constants';
+import { HttpStatusCode } from './utils';
 
 export function createServer(): Express {
 	// initialize express app

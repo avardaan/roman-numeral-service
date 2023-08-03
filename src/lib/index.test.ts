@@ -19,14 +19,15 @@ const invalidIntegerInputs: any[] = [
 	IntToRomanInputConstraints.MIN - 1,
 	IntToRomanInputConstraints.MAX + 1,
 	"222''",
+	// FIX THIS 10.0
 ];
 const validIntegerToRomanNumeralMap: Map<number, string> = new Map([
 	[42, 'XLII'],
 	[256, 'CCLVI'],
-	[789.0, 'DCCLXXXIX'],
+	[789, 'DCCLXXXIX'],
 	[1234, 'MCCXXXIV'],
 	[1987, 'MCMLXXXVII'],
-	[2023.0, 'MMXXIII'],
+	[2023, 'MMXXIII'],
 	[3549, 'MMMDXLIX'],
 	[3999, 'MMMCMXCIX'],
 ]);

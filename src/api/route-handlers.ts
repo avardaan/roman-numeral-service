@@ -1,9 +1,9 @@
-import { HttpStatusCode } from '../constants';
 import { INT_TO_ROMAN_BASE_MAP, intToRomanNumeral } from '../lib';
 import {
 	INTERNAL_SERVER_ERROR_MESSAGE,
 	IntToRomanNumeralQueryParamRange,
 	getIntToRomanNumeralRouteHandlerErrorMessage,
+	HttpStatusCode,
 } from './utils';
 import {
 	RomanNumeralErrorResponseBody,

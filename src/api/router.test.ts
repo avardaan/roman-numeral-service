@@ -1,33 +1,56 @@
 import { createServer } from '.';
+import { HttpStatusCode, getIntToRomanNumeralRouteHandlerErrorMessage } from './utils';
 import { API_ROUTES } from './router';
-import request from 'supertest';
+import supertestRequest from 'supertest';
 
 const app = createServer();
 
-
-const getIntegerToRomanNumeralURLWithParam = (int: any) =>
-		`${API_ROUTES.INT_TO_ROMAN_NUMERAL}?query=${int}`;
+const getIntegerToRomanNumeralURLWithParam = (input: any) =>
+	`${API_ROUTES.INT_TO_ROMAN_NUMERAL}?query=${input}`;
 
 const IntToRomanNumeralTestData = [
-  {
-    request: {
-      url: getIntegerToRomanNumeralURLWithParam(1)
-    },
-    response: {
-      status: 200,
-      body: {
-        input: '1',
-        output: 'I'
-      }
-    }
-  }
+	{
+		request: {
+			url: getIntegerToRomanNumeralURLWithParam(null),
+		},
+		response: {
+			status: HttpStatusCode.BAD_REQUEST,
+			body: {
+				error: getIntToRomanNumeralRouteHandlerErrorMessage(null as any),
+			},
+		},
+	},
+	{
+		request: {
+			url: getIntegerToRomanNumeralURLWithParam(undefined),
+		},
+		response: {
+			status: HttpStatusCode.BAD_REQUEST,
+			body: {
+				error: getIntToRomanNumeralRouteHandlerErrorMessage(undefined as any),
+			},
+		},
+	},
+	{
+		request: {
+			url: getIntegerToRomanNumeralURLWithParam(1),
+		},
+		response: {
+			status: HttpStatusCode.OK,
+			body: {
+				input: '1',
+				output: 'I',
+			},
+		},
+	},
 ];
 
-describe(`GET ${API_ROUTES.INT_TO_ROMAN_NUMERAL}`, () => {
-	
-
-	it('should return 200', async () => {
-		const response = await request(app).get(getIntegerToRomanNumeralURLWithParam(1));
-		expect(response.status).toBe(200);
+describe.only(`GET ${API_ROUTES.INT_TO_ROMAN_NUMERAL}`, () => {
+	IntToRomanNumeralTestData.forEach(({ request, response: expectedResponse }) => {
+		it(`should return status=${expectedResponse.status} with expected body for request to ${request.url}`, async () => {
+			const res = await supertestRequest(app).get(request.url);
+			expect(res.status).toBe(expectedResponse.status);
+			expect(res.body).toEqual(expectedResponse.body);
+		});
 	});
 });
