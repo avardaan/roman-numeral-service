@@ -1,7 +1,11 @@
-import { IntToRomanInputConstraints } from './constants';
+import {
+	IntToRomanInputConstraints,
+	intToRomanInvalidIntegerInputErrorMessage,
+	intToRomanInvalidMapErrorMessage,
+} from './utils';
 
 // ordered map of integer values to roman symbols
-const INT_TO_ROMAN_MAP: Map<number, string> = new Map([
+export const INT_TO_ROMAN_MAP: Map<number, string> = new Map([
 	[1000, 'M'],
 	[900, 'CM'],
 	[500, 'D'],
@@ -22,24 +26,26 @@ const INT_TO_ROMAN_MAP: Map<number, string> = new Map([
  * @param intInput integer to be converted to roman numeral string
  * @returns converted roman numeral string
  */
-export function intToRomanNumeral(intInput: number): string {
-	// validate input
-	const isInputValid: boolean =
+export function intToRomanNumeral(intInput: number, intToRomanMap: Map<number, string>): string {
+	// validate integer input
+	const isIntegerInputValid: boolean =
 		Number.isInteger(intInput) &&
 		intInput >= IntToRomanInputConstraints.MIN &&
 		intInput <= IntToRomanInputConstraints.MAX;
 
 	// throw if input is invalid
-	if (!isInputValid) {
-		throw new Error(
-			`Invalid input [intInput=${intInput}] - must be an integer between \
-			${IntToRomanInputConstraints.MIN} and ${IntToRomanInputConstraints.MAX} (inclusive).`
-		);
+	if (!isIntegerInputValid) {
+		throw new Error(intToRomanInvalidIntegerInputErrorMessage(intInput));
+	}
+
+	// validate map
+	if (!intToRomanMap || intToRomanMap.size === 0) {
+		throw new Error(intToRomanInvalidMapErrorMessage(intToRomanMap));
 	}
 
 	let romanNumeral: string = '';
 	// perform conversion
-	INT_TO_ROMAN_MAP.forEach((romanSymbol: string, intValue: number) => {
+	intToRomanMap.forEach((romanSymbol: string, intValue: number) => {
 		while (intInput >= intValue) {
 			romanNumeral += romanSymbol;
 			intInput -= intValue;
