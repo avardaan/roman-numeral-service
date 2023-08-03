@@ -1,6 +1,6 @@
 import { IntToRomanInputConstraints } from './constants';
 
-// ordered
+// ordered map of integer values to roman symbols
 const INT_TO_ROMAN_MAP: Map<number, string> = new Map([
 	[1000, 'M'],
 	[900, 'CM'],
@@ -17,7 +17,12 @@ const INT_TO_ROMAN_MAP: Map<number, string> = new Map([
 	[1, 'I'],
 ]);
 
-export function intToRoman(intInput: number): string {
+/**
+ *
+ * @param intInput integer to be converted to roman numeral string
+ * @returns converted roman numeral string
+ */
+export function intToRomanNumeral(intInput: number): string {
 	// validate input
 	const isInputValid: boolean =
 		Number.isInteger(intInput) &&

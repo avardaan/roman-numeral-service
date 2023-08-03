@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '../constants';
-import { intToRoman } from '../lib';
+import { intToRomanNumeral } from '../lib';
 import { RomanNumeralIntInputConstraints } from './constants';
 import {
 	RomanNumeralErrorResponseBody,
@@ -36,7 +36,7 @@ export function convertIntToRomanNumeral(
 	let romanNumeralOutput: string;
 	try {
 		// attempt int to roman conversion
-		romanNumeralOutput = intToRoman(inputInt);
+		romanNumeralOutput = intToRomanNumeral(inputInt);
 	} catch (err) {
 		// internal server error, exit early
 		const serverErrorResponseBody: RomanNumeralErrorResponseBody = {
