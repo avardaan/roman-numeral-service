@@ -2,7 +2,7 @@ import express, { Router } from 'express';
 import { convertIntToRomanNumeral } from './route-handlers';
 
 // define API routes
-enum API_ROUTES {
+export enum API_ROUTES {
 	INT_TO_ROMAN_NUMERAL = '/romannumeral',
 }
 

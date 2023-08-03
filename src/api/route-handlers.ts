@@ -1,6 +1,10 @@
 import { HttpStatusCode } from '../constants';
 import { INT_TO_ROMAN_BASE_MAP, intToRomanNumeral } from '../lib';
-import { RomanNumeralIntInputConstraints } from './constants';
+import {
+	INTERNAL_SERVER_ERROR_MESSAGE,
+	IntToRomanNumeralQueryParamRange,
+	getIntToRomanNumeralRouteHandlerErrorMessage,
+} from './utils';
 import {
 	RomanNumeralErrorResponseBody,
 	RomanNumeralRequestQueryParams,
@@ -21,12 +25,12 @@ export function convertIntToRomanNumeral(
 	// validate input
 	const isInputValid: boolean =
 		Number.isInteger(inputInt) &&
-		inputInt >= RomanNumeralIntInputConstraints.MIN &&
-		inputInt <= RomanNumeralIntInputConstraints.MAX;
+		inputInt >= IntToRomanNumeralQueryParamRange.MIN &&
+		inputInt <= IntToRomanNumeralQueryParamRange.MAX;
 
 	if (!isInputValid) {
 		const badRequestResponseBody: RomanNumeralErrorResponseBody = {
-			error: `Invalid param [query=${inputIntAsString}] - must be an integer between ${RomanNumeralIntInputConstraints.MIN} and ${RomanNumeralIntInputConstraints.MAX} (inclusive).`,
+			error: getIntToRomanNumeralRouteHandlerErrorMessage(inputIntAsString),
 		};
 		// bad request, exit early
 		res.status(HttpStatusCode.BAD_REQUEST).json(badRequestResponseBody);
@@ -40,7 +44,7 @@ export function convertIntToRomanNumeral(
 	} catch (err) {
 		// internal server error, exit early
 		const serverErrorResponseBody: RomanNumeralErrorResponseBody = {
-			error: 'Internal server error.',
+			error: INTERNAL_SERVER_ERROR_MESSAGE,
 		};
 		res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(serverErrorResponseBody);
 		return;

@@ -1,5 +1,4 @@
 import { intToRomanNumeral, INT_TO_ROMAN_BASE_MAP } from '.';
-import { RomanNumeralIntInputConstraints } from '../api/constants';
 import {
 	IntToRomanInputConstraints,
 	intToRomanInvalidIntegerInputErrorMessage,
@@ -7,6 +6,7 @@ import {
 } from './utils';
 
 // testing inputs
+const invalidMapInputs: any[] = [null, undefined, new Map(), {}, [], 'foo', 55];
 const invalidIntegerInputs: any[] = [
 	null,
 	undefined,
@@ -16,8 +16,9 @@ const invalidIntegerInputs: any[] = [
 	'',
 	'foo',
 	55.5,
-	RomanNumeralIntInputConstraints.MIN - 1,
-	RomanNumeralIntInputConstraints.MAX + 1,
+	IntToRomanInputConstraints.MIN - 1,
+	IntToRomanInputConstraints.MAX + 1,
+	"222''",
 ];
 const validIntegerToRomanNumeralMap: Map<number, string> = new Map([
 	[42, 'XLII'],
@@ -29,8 +30,6 @@ const validIntegerToRomanNumeralMap: Map<number, string> = new Map([
 	[3549, 'MMMDXLIX'],
 	[3999, 'MMMCMXCIX'],
 ]);
-
-const invalidMapInputs: any[] = [null, undefined, new Map(), {}, [], 'foo', 55];
 
 describe('intToRomanNumeral', () => {
 	invalidMapInputs.forEach((invalidMapInput) => {
@@ -49,9 +48,9 @@ describe('intToRomanNumeral', () => {
 		});
 	});
 
-	validIntegerToRomanNumeralMap.forEach((expectedOutput, input) => {
-		it(`should convert integer:${input} to roman:${expectedOutput}`, () => {
-			expect(intToRomanNumeral(input, INT_TO_ROMAN_BASE_MAP)).toBe(expectedOutput);
+	validIntegerToRomanNumeralMap.forEach((expectedValidRomanOutput, validIntegerInput) => {
+		it(`should convert integer:${validIntegerInput} to roman:${expectedValidRomanOutput}`, () => {
+			expect(intToRomanNumeral(validIntegerInput, INT_TO_ROMAN_BASE_MAP)).toBe(expectedValidRomanOutput);
 		});
 	});
 });
