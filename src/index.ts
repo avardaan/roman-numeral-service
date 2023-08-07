@@ -11,5 +11,5 @@ const app: Express = createServer();
 
 // start server and listen for requests
 app.listen(PORT, () => {
-	logger.info('HTTP server listening...');
+	logger.info(`HTTP server listening on PORT=${PORT}...`);
 });
