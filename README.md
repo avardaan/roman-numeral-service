@@ -1,6 +1,6 @@
 # Roman Numeral Converter
 
-A service that converts arabic number input to its roman numeral equivalent.
+A service that converts arabic number input to its roman numeral equivalent. The following Roman Numeral reference was used - [Britannica Roman Numerals](https://www.britannica.com/topic/Roman-numeral)
 
 ## Prerequisites
 
