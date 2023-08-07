@@ -19,7 +19,7 @@ const invalidIntegerInputs: any[] = [
 	IntToRomanInputConstraints.MIN - 1,
 	IntToRomanInputConstraints.MAX + 1,
 	"222''",
-	// FIX THIS 10.0
+	"10.0"
 ];
 const validIntegerToRomanNumeralMap: Map<number, string> = new Map([
 	[42, 'XLII'],
