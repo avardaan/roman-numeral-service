@@ -36,7 +36,7 @@ export function convertIntToRomanNumeral(
 		};
 		// bad request, exit early
 		res.status(HttpStatusCode.BAD_REQUEST).json(badRequestResponseBody);
-		logger.info(`Bad request: query = ${inputIntAsString}`);
+		logger.info(`${HttpStatusCode.BAD_REQUEST} Bad request: query = ${inputIntAsString}`);
 		return;
 	}
 
@@ -50,7 +50,7 @@ export function convertIntToRomanNumeral(
 			error: INTERNAL_SERVER_ERROR_MESSAGE,
 		};
 		res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(serverErrorResponseBody);
-		logger.error(err);
+		logger.error(`${HttpStatusCode.INTERNAL_SERVER_ERROR} Error: ${err}`);
 		return;
 	}
 	// create response object
@@ -60,5 +60,7 @@ export function convertIntToRomanNumeral(
 	};
 	// send json response
 	res.status(HttpStatusCode.OK).json(response);
-	logger.info(`Success: query = ${inputIntAsString}, result = ${romanNumeralOutput}`);
+	logger.info(
+		`${HttpStatusCode.OK} Success: query = ${inputIntAsString}, result = ${romanNumeralOutput}`
+	);
 }
