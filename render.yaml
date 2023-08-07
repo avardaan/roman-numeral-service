@@ -1,12 +1,13 @@
+# Infrastructure as Code for a containerized web service
+# spec: https://render.com/docs/blueprint-spec
 services:
-  # A containerized roman numeral web service
   - type: web
     name: roman-numeral-service
     runtime: docker
     dockerfilePath: ./Dockerfile
-    repo: https://github.com/avardaan/roman-numeral-service # optional
+    repo: https://github.com/avardaan/roman-numeral-service
     region: oregon
     plan: free
     branch: main
-    numInstances: 1 # optional (defaults to 1)
+    numInstances: 1
     # rootDir: default to root of repo
