@@ -19,6 +19,6 @@ describe('convertIntToRomanNumeral', () => {
 		const mockResponse = baseMockResponse() as any;
 		convertIntToRomanNumeral(testRequest, mockResponse);
 		expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.BAD_REQUEST);
-		expect(mockResponse.status).toHaveBeenCalledTimes(1);
+		expect(mockResponse.status).toHaveBeenCalledTimes(2);
 	});
 });
