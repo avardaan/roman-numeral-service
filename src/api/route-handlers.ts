@@ -6,7 +6,7 @@ import {
 	HttpStatusCode,
 } from './utils';
 import {
-	RomanNumeralErrorResponseBody,
+	ErrorResponseBody,
 	RomanNumeralRequestQueryParams,
 	RomanNumeralResponseBody,
 	RomanNumeralSuccessResponseBody,
@@ -18,7 +18,7 @@ export function convertIntToRomanNumeral(
 	req: Request<{}, {}, {}, RomanNumeralRequestQueryParams>,
 	res: Response<RomanNumeralResponseBody>
 ): void {
-	// get query param as string, with optional chaining
+	// get query param as string, defensively with optional chaining
 	const inputIntAsString: string = req.query?.query;
 	// convert query param to integer for validation and further processing
 	const inputInt: number = parseInt(inputIntAsString, 10);
@@ -29,7 +29,7 @@ export function convertIntToRomanNumeral(
 		inputInt <= IntToRomanNumeralQueryParamRange.MAX;
 
 	if (!isInputValid) {
-		const badRequestResponseBody: RomanNumeralErrorResponseBody = {
+		const badRequestResponseBody: ErrorResponseBody = {
 			error: getIntToRomanNumeralRouteHandlerErrorMessage(inputIntAsString),
 		};
 		// bad request, exit early
@@ -43,7 +43,7 @@ export function convertIntToRomanNumeral(
 		romanNumeralOutput = intToRomanNumeral(inputInt, INT_TO_ROMAN_BASE_MAP);
 	} catch (err) {
 		// internal server error, exit early
-		const serverErrorResponseBody: RomanNumeralErrorResponseBody = {
+		const serverErrorResponseBody: ErrorResponseBody = {
 			error: INTERNAL_SERVER_ERROR_MESSAGE,
 		};
 		res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(serverErrorResponseBody);

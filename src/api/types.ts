@@ -7,10 +7,10 @@ export interface RomanNumeralSuccessResponseBody {
 	output: string;
 }
 
-export interface RomanNumeralErrorResponseBody {
+export interface ErrorResponseBody {
 	error: string;
 }
 
 export type RomanNumeralResponseBody =
 	| RomanNumeralSuccessResponseBody
-	| RomanNumeralErrorResponseBody;
+	| ErrorResponseBody;
