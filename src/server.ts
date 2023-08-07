@@ -3,7 +3,7 @@ import { apiRouter } from './api/router';
 import { HttpStatusCode } from './api/utils';
 import logger from './logger';
 
-export function createServer(): Express {
+function createServer(): Express {
 	logger.info('Creating HTTP server...');
 	// initialize express app
 	const app: Express = express();
@@ -25,3 +25,5 @@ export function createServer(): Express {
 	logger.info('HTTP server created.');
 	return app;
 }
+
+export default createServer;

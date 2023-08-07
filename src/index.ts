@@ -1,6 +1,6 @@
 // Roman Numeral Converter API
 import { Express } from 'express';
-import { createServer } from './server';
+import createServer from './server';
 import logger from './logger';
 
 // define port for server to bind to
