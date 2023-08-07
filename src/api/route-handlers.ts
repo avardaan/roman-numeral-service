@@ -13,6 +13,7 @@ import {
 } from './types';
 import { Request, Response } from 'express';
 import { parseStrictInteger } from '../lib/utils';
+import logger from '../logger';
 
 // define route handler
 export function convertIntToRomanNumeral(
@@ -35,6 +36,7 @@ export function convertIntToRomanNumeral(
 		};
 		// bad request, exit early
 		res.status(HttpStatusCode.BAD_REQUEST).json(badRequestResponseBody);
+		logger.info(`Bad request: query = ${inputIntAsString}`);
 		return;
 	}
 
@@ -48,6 +50,7 @@ export function convertIntToRomanNumeral(
 			error: INTERNAL_SERVER_ERROR_MESSAGE,
 		};
 		res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(serverErrorResponseBody);
+		logger.error(err);
 		return;
 	}
 	// create response object
@@ -57,4 +60,5 @@ export function convertIntToRomanNumeral(
 	};
 	// send json response
 	res.status(HttpStatusCode.OK).json(response);
+	logger.info(`Success: query = ${inputIntAsString}, result = ${romanNumeralOutput}`);
 }
