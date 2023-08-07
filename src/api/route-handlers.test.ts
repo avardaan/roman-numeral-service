@@ -1,6 +1,8 @@
 import { convertIntToRomanNumeral } from './route-handlers';
 import { HttpStatusCode } from './utils';
 
+jest.mock('../logger');
+
 const baseTestRequest = (inputInteger?: String) => ({
 	query: {
 		query: inputInteger,
