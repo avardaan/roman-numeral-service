@@ -19,7 +19,7 @@ COPY . .
 # Run tests
 RUN npm test
 
-# Build the project
+# Build the project, transpile TypeScript to JavaScript
 RUN npm run build
 
 # ===== Production Stage =====
