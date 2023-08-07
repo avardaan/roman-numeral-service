@@ -2,6 +2,7 @@ import {
 	IntToRomanInputConstraints,
 	intToRomanInvalidIntegerInputErrorMessage,
 	intToRomanInvalidMapErrorMessage,
+	parseStrictInteger,
 } from './utils';
 
 // ordered map of integer values to roman symbols
@@ -24,21 +25,23 @@ export const INT_TO_ROMAN_BASE_MAP: Map<number, string> = new Map([
 /**
  *
  * @param intInput integer to be converted to roman numeral string
+ * @param intToRomanMap ordered map of integer values to roman symbols
  * @returns converted roman numeral string
  */
 export function intToRomanNumeral(intInput: number, intToRomanMap: Map<number, string>): string {
+	const parsedIntInput: number = parseStrictInteger(intInput);
 	// validate integer input
 	const isIntegerInputValid: boolean =
-		Number.isInteger(intInput) &&
-		intInput >= IntToRomanInputConstraints.MIN &&
-		intInput <= IntToRomanInputConstraints.MAX;
+		!isNaN(parsedIntInput) &&
+		parsedIntInput >= IntToRomanInputConstraints.MIN &&
+		parsedIntInput <= IntToRomanInputConstraints.MAX;
 
-	// throw if input is invalid
+	// validate integer input
 	if (!isIntegerInputValid) {
 		throw new Error(intToRomanInvalidIntegerInputErrorMessage(intInput));
 	}
 
-	// validate map
+	// validate map input
 	if (!(intToRomanMap instanceof Map) || intToRomanMap.size === 0) {
 		throw new Error(intToRomanInvalidMapErrorMessage(intToRomanMap));
 	}

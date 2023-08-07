@@ -1,24 +1,24 @@
-import { Request } from 'express';
 import { convertIntToRomanNumeral } from './route-handlers';
 import { HttpStatusCode } from './utils';
 
-const baseTestRequest = {
+const baseTestRequest = (inputInteger?: String) => ({
 	query: {
-		query: undefined,
+		query: inputInteger,
 	},
-};
+});
 
-const baseMockResponse = {
+const baseMockResponse = () => ({
 	status: jest.fn().mockReturnThis(),
 	json: jest.fn(),
-};
-
-const baseErrorResponseBody = ()
+});
 
 describe('convertIntToRomanNumeral', () => {
 	it(`calls res.status() with ${HttpStatusCode.BAD_REQUEST} and res.json() with error \
   message when query param is undefined`, () => {
-		convertIntToRomanNumeral(baseTestRequest as any, baseMockResponse as any);
-		expect(baseMockResponse.status).toHaveBeenCalledWith(HttpStatusCode.BAD_REQUEST);
+		const testRequest = baseTestRequest(undefined) as any;
+		const mockResponse = baseMockResponse() as any;
+		convertIntToRomanNumeral(testRequest, mockResponse);
+		expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.BAD_REQUEST);
+		expect(mockResponse.status).toHaveBeenCalledTimes(1);
 	});
 });

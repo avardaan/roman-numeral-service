@@ -12,6 +12,7 @@ import {
 	RomanNumeralSuccessResponseBody,
 } from './types';
 import { Request, Response } from 'express';
+import { parseStrictInteger } from '../lib/utils';
 
 // define route handler
 export function convertIntToRomanNumeral(
@@ -21,12 +22,12 @@ export function convertIntToRomanNumeral(
 	// get query param as string, defensively with optional chaining
 	const inputIntAsString: string = req.query?.query;
 	// convert query param to integer for validation and further processing
-	const inputInt: number = parseInt(inputIntAsString, 10);
+	const parsedInputInt: number = parseStrictInteger(inputIntAsString);
 	// validate input
 	const isInputValid: boolean =
-		Number.isInteger(inputInt) &&
-		inputInt >= IntToRomanNumeralQueryParamRange.MIN &&
-		inputInt <= IntToRomanNumeralQueryParamRange.MAX;
+		!isNaN(parsedInputInt) &&
+		parsedInputInt >= IntToRomanNumeralQueryParamRange.MIN &&
+		parsedInputInt <= IntToRomanNumeralQueryParamRange.MAX;
 
 	if (!isInputValid) {
 		const badRequestResponseBody: ErrorResponseBody = {
@@ -40,7 +41,7 @@ export function convertIntToRomanNumeral(
 	let romanNumeralOutput: string;
 	try {
 		// attempt int to roman conversion
-		romanNumeralOutput = intToRomanNumeral(inputInt, INT_TO_ROMAN_BASE_MAP);
+		romanNumeralOutput = intToRomanNumeral(parsedInputInt, INT_TO_ROMAN_BASE_MAP);
 	} catch (err) {
 		// internal server error, exit early
 		const serverErrorResponseBody: ErrorResponseBody = {
