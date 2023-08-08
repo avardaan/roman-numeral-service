@@ -1,13 +1,18 @@
 import { convertIntToRomanNumeral } from './route-handlers';
-import { HttpStatusCode, getIntToRomanNumeralRouteHandlerErrorMessage } from './utils';
+import {
+	HttpStatusCode,
+	INTERNAL_SERVER_ERROR_MESSAGE,
+	getIntToRomanNumeralRouteHandlerErrorMessage,
+} from './utils';
+import * as lib from '../lib';
 
 // mock the logger module
 jest.mock('../logger');
-
-/**
- * TODO: Add a mock for the lib module to mock the intToRomanNumeral function, spy on it, and
- * assert that it is not called for the error cases, and it is called with the expected arguments for the success cases.
- */
+// mock the intToRomanNumeral function
+const intToRomanMockResponse = 'mocked';
+const intToRomanNumeralSpy = jest
+	.spyOn(lib, 'intToRomanNumeral')
+	.mockImplementation(() => intToRomanMockResponse);
 
 const baseTestRequest = (inputInteger?: string) => ({
 	query: {
@@ -30,6 +35,11 @@ const baseErrorResponseBody = (errorMessage: string) => ({
 });
 
 describe('convertIntToRomanNumeral', () => {
+	beforeEach(() => {
+		// reset the mock implementation and call count before each test
+		intToRomanNumeralSpy.mockClear();
+	});
+
 	it(`calls res.status() with ${HttpStatusCode.BAD_REQUEST} and res.json() with error \
   message when query param is undefined`, () => {
 		const input = undefined as any;
@@ -42,6 +52,7 @@ describe('convertIntToRomanNumeral', () => {
 		expect(mockResponse.json).toHaveBeenCalledWith(
 			baseErrorResponseBody(getIntToRomanNumeralRouteHandlerErrorMessage(input))
 		);
+		expect(intToRomanNumeralSpy).toHaveBeenCalledTimes(0);
 	});
 
 	it(`calls res.status() with ${HttpStatusCode.BAD_REQUEST} and res.json() with error \
@@ -56,6 +67,7 @@ describe('convertIntToRomanNumeral', () => {
 		expect(mockResponse.json).toHaveBeenCalledWith(
 			baseErrorResponseBody(getIntToRomanNumeralRouteHandlerErrorMessage(input))
 		);
+		expect(intToRomanNumeralSpy).toHaveBeenCalledTimes(0);
 	});
 
 	it(`calls res.status() with ${HttpStatusCode.BAD_REQUEST} and res.json() with error \
@@ -70,6 +82,7 @@ describe('convertIntToRomanNumeral', () => {
 		expect(mockResponse.json).toHaveBeenCalledWith(
 			baseErrorResponseBody(getIntToRomanNumeralRouteHandlerErrorMessage(input))
 		);
+		expect(intToRomanNumeralSpy).toHaveBeenCalledTimes(0);
 	});
 
 	it(`calls res.status() with ${HttpStatusCode.BAD_REQUEST} and res.json() with error \
@@ -84,6 +97,22 @@ describe('convertIntToRomanNumeral', () => {
 		expect(mockResponse.json).toHaveBeenCalledWith(
 			baseErrorResponseBody(getIntToRomanNumeralRouteHandlerErrorMessage(input))
 		);
+		expect(intToRomanNumeralSpy).toHaveBeenCalledTimes(0);
+	});
+
+	it(`calls res.status() with ${HttpStatusCode.BAD_REQUEST} and res.json() with error \
+	message when query param is a string that cannot be parsed to an integer`, () => {
+		const input = '22.00';
+		const testRequest = baseTestRequest(input) as any;
+		const mockResponse = baseMockResponse() as any;
+		convertIntToRomanNumeral(testRequest, mockResponse);
+		expect(mockResponse.status).toHaveBeenCalledTimes(1);
+		expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.BAD_REQUEST);
+		expect(mockResponse.json).toHaveBeenCalledTimes(1);
+		expect(mockResponse.json).toHaveBeenCalledWith(
+			baseErrorResponseBody(getIntToRomanNumeralRouteHandlerErrorMessage(input))
+		);
+		expect(intToRomanNumeralSpy).toHaveBeenCalledTimes(0);
 	});
 
 	it(`calls res.status() with ${HttpStatusCode.BAD_REQUEST} and res.json() with error \
@@ -99,6 +128,25 @@ describe('convertIntToRomanNumeral', () => {
 		expect(mockResponse.json).toHaveBeenCalledWith(
 			baseErrorResponseBody(getIntToRomanNumeralRouteHandlerErrorMessage(input))
 		);
+		expect(intToRomanNumeralSpy).toHaveBeenCalledTimes(0);
+	});
+
+	it(`calls res.status() with ${HttpStatusCode.INTERNAL_SERVER_ERROR} and res.json() with error \
+	message when intToRomanNumeral throws an error`, () => {
+		const input = '1';
+		const testRequest = baseTestRequest(input) as any;
+		const mockResponse = baseMockResponse() as any;
+		intToRomanNumeralSpy.mockImplementationOnce(() => {
+			throw new Error();
+		});
+		convertIntToRomanNumeral(testRequest, mockResponse);
+		expect(mockResponse.status).toHaveBeenCalledTimes(1);
+		expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.INTERNAL_SERVER_ERROR);
+		expect(mockResponse.json).toHaveBeenCalledTimes(1);
+		expect(mockResponse.json).toHaveBeenCalledWith(
+			baseErrorResponseBody(INTERNAL_SERVER_ERROR_MESSAGE)
+		);
+		expect(intToRomanNumeralSpy).toHaveBeenCalledTimes(1);
 	});
 
 	it(`calls res.status() with ${HttpStatusCode.OK} and res.json() with the correct \
@@ -111,7 +159,10 @@ describe('convertIntToRomanNumeral', () => {
 		expect(mockResponse.status).toHaveBeenCalledTimes(1);
 		expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.OK);
 		expect(mockResponse.json).toHaveBeenCalledTimes(1);
-		expect(mockResponse.json).toHaveBeenCalledWith(baseSuccessResponseBody(input, 'I'));
+		expect(mockResponse.json).toHaveBeenCalledWith(
+			baseSuccessResponseBody(input, intToRomanMockResponse)
+		);
+		expect(intToRomanNumeralSpy).toHaveBeenCalledTimes(1);
 	});
 
 	it(`calls res.status() with ${HttpStatusCode.OK} and res.json() with the correct \
@@ -124,6 +175,9 @@ describe('convertIntToRomanNumeral', () => {
 		expect(mockResponse.status).toHaveBeenCalledTimes(1);
 		expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.OK);
 		expect(mockResponse.json).toHaveBeenCalledTimes(1);
-		expect(mockResponse.json).toHaveBeenCalledWith(baseSuccessResponseBody(input, 'MMMCMXCIX'));
+		expect(mockResponse.json).toHaveBeenCalledWith(
+			baseSuccessResponseBody(input, intToRomanMockResponse)
+		);
+		expect(intToRomanNumeralSpy).toHaveBeenCalledTimes(1);
 	});
 });
