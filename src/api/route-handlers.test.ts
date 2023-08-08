@@ -1,6 +1,7 @@
 import { convertIntToRomanNumeral } from './route-handlers';
 import { HttpStatusCode, getIntToRomanNumeralRouteHandlerErrorMessage } from './utils';
 
+// mock the logger module
 jest.mock('../logger');
 
 /**
