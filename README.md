@@ -102,7 +102,7 @@ All dependencies and their versions are listed in `package.json`.
 
 3. Testing Philosophy
 
-   - When writing unit tests, I attempt to test only the appropriate unit of functionality. The core function responsible for accepting an integer and returning a roman numeral does just that, and is tested for only that behavior. The route handler which handles the query parameter input in the HTTP request validates the input and calls the core function, so it is tested on just that - validating user input and calling the appropriate function with the appropriate arguments.
+   - When writing unit tests, I attempt to test only the appropriate unit of functionality. The core function responsible for accepting an integer and returning a roman numeral does just that, and is tested for only that behavior. The route handler which handles the query parameter input in the HTTP request validates the input and calls the core function, so it is tested on just that - validating user input and calling the expected function with the expected arguments.
 
 4. Containerization and Deployment
 
