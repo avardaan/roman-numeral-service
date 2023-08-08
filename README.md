@@ -125,5 +125,7 @@ All dependencies and their versions are listed in `package.json`.
    - with IAM permissions following principle of least privilege
    - logs being flushed to CloudWatch and stored in S3 with apppropriate retention policies
    - monitoring and alerting via CloudWatch
+   - infrastructure defined as code via CloudFormation or AWS CDK
+   - and so on...
 6. Logging - Currently, the project uses the logging library `winston`, which is set up to log to the console/stdout. In production, these logs are recorded on the Render platform, enabling storage and exploration. Eventually, logging should be structured, and flush to a centralized platform (e.g. Datadog, AWS CloudWatch) to enhance observability of the system and enable purposeful monitoring.
 7. Add Build filters - it may not be ideal to build and redeploy the application when any file changes. Build filters would help avoid unnecessary deployments by ignoring changes to files that are immaterial to application deployment.
