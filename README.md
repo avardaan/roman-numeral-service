@@ -10,6 +10,7 @@ A service that converts arabic number input to its roman numeral equivalent. The
 
 1. Clone the repository with `git clone https://github.com/avardaan/roman-numeral-service` then navigate to the project directory with `cd roman-numeral-service`
 2. Install dependencies with `npm install`
+3. Inspect the `.env.example` file to see required environment variables, if any. Set environment variables in the execution environment as needed.
 
 ## Usage
 
